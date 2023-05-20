@@ -111,7 +111,7 @@ contract HappyDEX {
     }
 
     /**
-     * @notice allows deposits of $BAL and $ETH to liquidity pool
+     * @notice allows deposits of $HAPPY and $ETH to liquidity pool
      * NOTE: parameter is the msg.value sent with this function call. That amount is used to determine the amount of $BAL needed as well and taken from the depositor.
      * NOTE: user has to make sure to give DEX approval to spend their tokens on their behalf by calling approve function prior to this function call.
      * NOTE: Equal parts of both assets will be removed from the user's wallet with respect to the price outlined by the AMM.

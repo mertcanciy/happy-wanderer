@@ -1,11 +1,13 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import Head from 'next/head';
-import { BugAntIcon, SparklesIcon } from '@heroicons/react/24/outline';
+//import { BugAntIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useScaffoldContract } from '~~/hooks/scaffold-eth/useScaffoldContract';
-import { Balance } from '~~/components/scaffold-eth';
+
 import { BigNumber, ethers, Signer } from 'ethers';
 import { useAccount, useBalance, useSigner } from 'wagmi';
 import { useScaffoldContractWrite } from '~~/hooks/scaffold-eth';
+import { ArrowUpIcon } from '@heroicons/react/20/solid';
+import { ArrowDownIcon } from '@heroicons/react/24/outline';
 
 
 const Home: React.FC = () => {
@@ -17,6 +19,7 @@ const Home: React.FC = () => {
   const [tokenBalance, setTokenBalance] = useState<string | undefined>(undefined);
   const [connectedWalletTokenBalance, setConnectedWalletTokenBalance] = useState<string | undefined>(undefined);
   const [approvalStatus, setApprovalStatus] = useState(false);
+  const [balanceUpdated, setBalanceUpdated] = useState(false);
 
   const handleToken1Change = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedToken1(event.target.value);
@@ -85,35 +88,38 @@ const Home: React.FC = () => {
   const { data: happyDexContract } = useScaffoldContract({
     contractName: "HappyDEX",
   });
+
+  const fetchConnectedWalletBalance = async () => {
+    try {
+      const account = connectedWalletAddr ?? '';
+      const balance = await happyContract?.balanceOf(account);
+
+      if (balance){
+        const formattedBalance = ethers.utils.formatUnits(balance, 18);
+        setConnectedWalletTokenBalance(formattedBalance);
+        setBalanceUpdated(true);
+      }
+    } catch (error) {
+      console.error("Error fetching token balance:", error);
+    }
+  };
+
+  const fetchBalance = async () => {
+    try {
+      const account = happyDexContract?.address ?? '';
+      const balance = await happyContract?.balanceOf(account);
+
+      if (balance){
+        const formattedBalance = ethers.utils.formatUnits(balance, 18);
+        setTokenBalance(formattedBalance);
+      }
+    } catch (error) {
+      console.error("Error fetching token balance:", error);
+    }
+  };
   
   useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        const account = happyDexContract?.address ?? '';
-        const balance = await happyContract?.balanceOf(account);
 
-        if (balance){
-          const formattedBalance = ethers.utils.formatUnits(balance, 18);
-          setTokenBalance(formattedBalance);
-        }
-      } catch (error) {
-        console.error("Error fetching token balance:", error);
-      }
-    };
-
-    const fetchConnectedWalletBalance = async () => {
-      try {
-        const account = connectedWalletAddr ?? '';
-        const balance = await happyContract?.balanceOf(account);
-
-        if (balance){
-          const formattedBalance = ethers.utils.formatUnits(balance, 18);
-          setConnectedWalletTokenBalance(formattedBalance);
-        }
-      } catch (error) {
-        console.error("Error fetching token balance:", error);
-      }
-    };
 
     fetchBalance();
     fetchConnectedWalletBalance();
@@ -130,6 +136,8 @@ const Home: React.FC = () => {
 
     const happyToETH = async () => {
       await writeAsync();
+      fetchConnectedWalletBalance();
+      fetchBalance();
     };
 
     const { writeAsync: ethToHappySwapWrite } = useScaffoldContractWrite({
@@ -140,10 +148,12 @@ const Home: React.FC = () => {
 
     const ethToHappySwap = async () => {
       await ethToHappySwapWrite();
+      fetchConnectedWalletBalance();
+      fetchBalance();
     };
 
 
-  const { data: dexBalance, isError, isLoading } = useBalance({
+  const { data: dexBalance } = useBalance({
     address: happyDexContract?.address,
   })
 
@@ -164,6 +174,12 @@ const Home: React.FC = () => {
       console.error('Error approving tokens:', error);
     }
   }; 
+
+  const handleFlip = () => {
+    setSelectedToken1(selectedToken2);
+    setSelectedToken2(selectedToken1);
+  };
+
   
   return (
     <>
@@ -181,16 +197,21 @@ const Home: React.FC = () => {
           <p className="text-center text-lg">You can swap your tokens directly!</p>
           <p className="text-center text-lg">Start earning!</p>
         </div>
-        <p className='pt-6'>Your $HAPPY Balance: {connectedWalletTokenBalance}</p>
+        <p className='pt-6'>YOUR $HAPPY BALANCE</p>
+        <h1 className="font-bold text-xl text-white rounded-md shadow-lg p-1 px-5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"> {connectedWalletTokenBalance} </h1>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">       
           <div className="flex justify-center items-center gap-1 flex-col sm:flex-col">
+          
+          
           <p className='font-bold'>TOTAL LIQUIDITY</p>
           <p>$HAPPY Balance: {tokenBalance}</p>
           <p>ETH Balance: {dexBalance?.formatted} {dexBalance?.symbol}</p>
           {/* <p>{happyContract?.address}</p> */}
+          
+          
           <div className="flex flex-col bg-base-100 px-12 py-12 text-center items-center rounded-3xl">    <div className="flex flex-col gap-9 ml-3">
           
               <div className="flex items-center py-4 mx-4">
@@ -198,7 +219,7 @@ const Home: React.FC = () => {
                   value={selectedToken1}
                   onChange={handleToken1Change}
                   className="py-3 px-3 rounded-md shadow-lg"
-                  defaultValue="0"
+                
                 >
                   <option value="" disabled>Select Token</option>
                   <option value="HAPPY">HAPPY</option>
@@ -212,12 +233,16 @@ const Home: React.FC = () => {
                   placeholder="0"
                 />
               </div>
+              <button 
+              className="flex py-1 px-1 rounded-md shadow-lg  mx-auto"
+              onClick = {handleFlip}><ArrowDownIcon className='w-6 h-6 fill-secondary hover:h-8'/><ArrowUpIcon className='w-6 h-6 fill-secondary hover:h-8'/>
+              </button>
               <div className="flex items-center mx-4 pb-5">
                 <select
                   value={selectedToken2}
                   onChange={handleToken2Change}
                   className="py-3 px-3 rounded-md shadow-lg"
-                  defaultValue="0"
+                  
                 >
                   <option value="" disabled>Select Token</option>
                   <option value="HAPPY">HAPPY</option>
