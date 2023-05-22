@@ -37,6 +37,7 @@ export default function IndexPage() {
         <Card className="mt-6">
           <TokenRequestsTable tokenReqs={tokenReqs} />
         </Card>
+      
       </main>
   );
 }

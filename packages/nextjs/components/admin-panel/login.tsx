@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { signIn, signOut } from 'next-auth/react';
+import React from 'react';
 
 export const Login = ({ user }: { user: any }) => {
     return (

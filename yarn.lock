@@ -4544,6 +4544,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^18":
+  version: 18.2.4
+  resolution: "@types/react-dom@npm:18.2.4"
+  dependencies:
+    "@types/react": "*"
+  checksum: 8301f35cf1cbfec8c723e9477aecf87774e3c168bd457d353b23c45064737213d3e8008b067c6767b7b08e4f2b3823ee239242a6c225fc91e7f8725ef8734124
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:*, @types/react@npm:^18.0.15, @types/react@npm:^18.0.9":
   version: 18.2.6
   resolution: "@types/react@npm:18.2.6"
@@ -16417,9 +16426,13 @@ __metadata:
   dependencies:
     "@headlessui/react": ^1.7.14
     "@tremor/react": ^2.7.0
+    "@types/react": ^18.0.9
+    "@types/react-dom": ^18
     husky: ^8.0.1
     lint-staged: ^13.0.3
     next-auth: ^4.22.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
   languageName: unknown
   linkType: soft
 

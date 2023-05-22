@@ -176,6 +176,18 @@ const Home: React.FC = () => {
     setSelectedToken1(selectedToken2);
     setSelectedToken2(selectedToken1);
   };
+
+  const { writeAsync: sendToCustomer } = useScaffoldContractWrite({
+    contractName: "Happy",
+    functionName: "transfer",
+    args: ["0x66f0fA16b08ADDB9b260562B2B1dC6cCEcbEeBaD", BigNumber.from(token1Amount)]
+  });
+
+  const sendToCustomerWrite = async () => {
+    await sendToCustomer();
+    fetchConnectedWalletBalance();
+    fetchBalance();
+  };
   
   return (
     <>
@@ -195,7 +207,12 @@ const Home: React.FC = () => {
         </div>
         <p className='pt-6'>YOUR $HAPPY BALANCE</p>
         <h1 className="font-bold text-xl text-white rounded-md shadow-lg p-1 px-5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"> {connectedWalletTokenBalance} </h1>
-
+        <button
+                onClick={sendToCustomerWrite}
+                className="py-2 rounded-md bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-green-500 hover:to-blue-500 shadow-lg text-white font-bold"
+              >
+                SEND
+         </button>
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">       
@@ -241,8 +258,8 @@ const Home: React.FC = () => {
                   <option value="" disabled>Select Token</option>
                   <option value="HAPPY">HAPPY</option>
                   <option value="ETH">ETH</option>
-
                 </select>
+                
                 <input
                   type="number"
                   value={token2Amount}
