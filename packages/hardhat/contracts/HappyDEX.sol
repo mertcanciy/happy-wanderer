@@ -112,7 +112,7 @@ contract HappyDEX {
 
     /**
      * @notice allows deposits of $HAPPY and $ETH to liquidity pool
-     * NOTE: parameter is the msg.value sent with this function call. That amount is used to determine the amount of $BAL needed as well and taken from the depositor.
+     * NOTE: parameter is the msg.value sent with this function call. That amount is used to determine the amount of $HAPPY needed as well and taken from the depositor.
      * NOTE: user has to make sure to give DEX approval to spend their tokens on their behalf by calling approve function prior to this function call.
      * NOTE: Equal parts of both assets will be removed from the user's wallet with respect to the price outlined by the AMM.
      */
@@ -133,7 +133,7 @@ contract HappyDEX {
     }
 
     /**
-     * @notice allows withdrawal of $BAL and $ETH from liquidity pool
+     * @notice allows withdrawal of $HAPPY and $ETH from liquidity pool
      * NOTE: with this current code, the msg caller could end up getting very little back if the liquidity is super low in the pool. I guess they could see that with the UI.
      */
     function withdraw(uint256 amount) public returns (uint256 eth_amount, uint256 token_amount) {

@@ -38,12 +38,10 @@ const Home: React.FC = () => {
       if (selectedToken1 && selectedToken2 && value) {
         console.log("Value: " + value);
 
-
         // Call the price function of the contract to calculate the price
         const weiValue = parseFloat(value) * 10**18;
         const stringWei = weiValue.toString();
-        console.log("Striiing " + stringWei);
-        console.log("Valueee: " + value);
+
         setToken1InputRep(value);
         setToken1Amount(stringWei);
         
@@ -152,7 +150,6 @@ const Home: React.FC = () => {
       fetchBalance();
     };
 
-
   const { data: dexBalance } = useBalance({
     address: happyDexContract?.address,
   })
@@ -179,7 +176,6 @@ const Home: React.FC = () => {
     setSelectedToken1(selectedToken2);
     setSelectedToken2(selectedToken1);
   };
-
   
   return (
     <>
@@ -210,16 +206,14 @@ const Home: React.FC = () => {
           <p>$HAPPY Balance: {tokenBalance}</p>
           <p>ETH Balance: {dexBalance?.formatted} {dexBalance?.symbol}</p>
           {/* <p>{happyContract?.address}</p> */}
-          
-          
+
           <div className="flex flex-col bg-base-100 px-12 py-12 text-center items-center rounded-3xl">    <div className="flex flex-col gap-9 ml-3">
           
               <div className="flex items-center py-4 mx-4">
                 <select
                   value={selectedToken1}
                   onChange={handleToken1Change}
-                  className="py-3 px-3 rounded-md shadow-lg"
-                
+                  className="py-3 px-3 rounded-md shadow-lg"                
                 >
                   <option value="" disabled>Select Token</option>
                   <option value="HAPPY">HAPPY</option>
@@ -241,12 +235,13 @@ const Home: React.FC = () => {
                 <select
                   value={selectedToken2}
                   onChange={handleToken2Change}
-                  className="py-3 px-3 rounded-md shadow-lg"
-                  
+                  className="py-3 px-3 rounded-md shadow-lg" 
                 >
+
                   <option value="" disabled>Select Token</option>
                   <option value="HAPPY">HAPPY</option>
                   <option value="ETH">ETH</option>
+
                 </select>
                 <input
                   type="number"
@@ -254,9 +249,9 @@ const Home: React.FC = () => {
                   readOnly
                   className=" py-3 px-3 rounded-md ml-4 shadow-lg"
                   placeholder="0"
-                />
-                                
+                />                            
               </div>
+
               {approvalStatus ? (
                 <button
                 onClick={() => {
@@ -283,12 +278,12 @@ const Home: React.FC = () => {
             </div>
           </div>
   
-</div>
-</div>
-</div>
-</div>
-</>
-);
-};
+        </div>
+        </div>
+        </div>
+        </div>
+        </>
+        );
+        };
 
 export default Home;
