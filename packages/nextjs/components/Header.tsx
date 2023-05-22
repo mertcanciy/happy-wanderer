@@ -1,10 +1,13 @@
 import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getServerSession } from 'next-auth/next';
 import { useRouter } from "next/router";
-import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, BugAntIcon, SparklesIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { Login } from "./admin-panel/login";
+
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
@@ -29,6 +32,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
+  const session = getServerSession();
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
@@ -49,6 +53,12 @@ export const Header = () => {
         <NavLink href="/liquidity-pool">
           <SparklesIcon className="h-4 w-4" />
           Liquidity Pool
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/admin-panel">
+          <BriefcaseIcon className="h-4 w-4" />
+          Admin Panel
         </NavLink>
       </li>
     </>
@@ -92,6 +102,7 @@ export const Header = () => {
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
+        <Login user={session?.user} />
       </div>
     </div>
   );
