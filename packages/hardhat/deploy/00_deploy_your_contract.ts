@@ -47,8 +47,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
  const happydexcontract = await hre.ethers.getContract("HappyDEX", deployer);
  await happycontract.transfer(
-  "0x4aDc44E492aBfAbBcB306575a0edDCE3ca06Cb47",
-  "" + 10 * 10 ** 18
+  "0x15694aa9827d960FF97619aEAF8eD7aeD403BA56",
+  "" + 20 * 10 ** 18
 );
 
   // If you are going to the testnet make sure your deployer account has enough ETH
