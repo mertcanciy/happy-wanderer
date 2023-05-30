@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         Happy: {
-          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
           abi: [
             {
               inputs: [],
@@ -285,7 +285,7 @@ const contracts = {
           ],
         },
         HappyDEX: {
-          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          address: "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44",
           abi: [
             {
               inputs: [
