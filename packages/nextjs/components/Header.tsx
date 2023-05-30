@@ -1,14 +1,13 @@
 import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getServerSession } from 'next-auth/next';
 import { useRouter } from "next/router";
 import { Bars3Icon, BugAntIcon, SparklesIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-import { Login } from "./admin-panel/login";
+import { useAccount } from "wagmi";
 
-
+const adminWalletAddresses = ['0x15694aa9827d960FF97619aEAF8eD7aeD403BA56','0x4aDc44E492aBfAbBcB306575a0edDCE3ca06Cb47']
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
   const isActive = router.pathname === href;
@@ -37,7 +36,7 @@ export const Header = () => {
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
   );
-
+  const {address: connectedWalletAddr } = useAccount()
   const navLinks = (
     <>
       <li>
@@ -55,12 +54,18 @@ export const Header = () => {
           Liquidity Pool
         </NavLink>
       </li>
+      {adminWalletAddresses.includes(connectedWalletAddr) 
+      ?
       <li>
         <NavLink href="/admin-panel">
           <BriefcaseIcon className="h-4 w-4" />
           Admin Panel
         </NavLink>
       </li>
+      :
+      <li></li>
+      }
+      
     </>
   );
 

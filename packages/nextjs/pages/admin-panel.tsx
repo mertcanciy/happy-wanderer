@@ -12,14 +12,17 @@ const AdminPage: React.FC = () => {
 
     useEffect(() => {
         const getTokenReqs = async () => {
-            const data = await fetch(`http://localhost:8080/api/tokenRequests`, {
+            const data = await fetch(`http://ec2-16-170-157-242.eu-north-1.compute.amazonaws.com:8080/api/tokenRequests`, {
               method: 'GET',
               headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
               },
             }).then(r => {
-              return r.json();
+              if(r.status == 200){
+                return r.json();
+              }
+              return [];
             })
             setTokenReqs(data)
         }
