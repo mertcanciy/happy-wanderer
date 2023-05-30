@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useMemo} from 'react';
 
 import {
   Table,
@@ -13,6 +13,9 @@ import {
   Button,
 } from '@tremor/react';
 
+import { BigNumber, ethers, Signer } from 'ethers';
+import { useScaffoldContractWrite } from '~~/hooks/scaffold-eth';
+
 interface TokenRequest {
   id: number;
   customer: {
@@ -23,71 +26,70 @@ interface TokenRequest {
   walletAddress:string;
 }
 
-export default function TokenRequestsTable({tokenReqs}: {tokenReqs : TokenRequest[]}) {
-  const [ saved, setSaved ] = useState(false);
 
-//   const [tokenReqs, setTokenReqs] = useState([]);
+const TokenRequestsTable: React.FC = ({ tokenReqs }) => {
+  const [saved, setSaved] = useState(false);
+  const [props, setProps] = useState({walletAddress:"0x4aDc44E492aBfAbBcB306575a0edDCE3ca06Cb47",tokenAmount:3});
 
-//   useEffect(() => {
-//     const getTokenReqs = async () => {
-//         const data = await fetch(`http://localhost:8080/api/tokenRequests`, {
-//           method: 'GET',
-//           headers: {
-//               'Accept': 'application/json',
-//               'Content-Type': 'application/json'
-//           },
-//         }).then(r => {
-//           return r.json();
-//         })
-//         setTokenReqs(data)
-//     }
+  const { writeAsync: sendToCustomer } = useScaffoldContractWrite({
+    contractName: 'Happy',
+    functionName: 'transfer',
+    args: [props.walletAddress, BigNumber.from((parseFloat((props.tokenAmount).toString()) * 10 ** 18).toString())],
+  });  
 
-//     getTokenReqs();
-//   }, [])
+  const sendToCustomerWrite = async (props) => {    
+    console.log(props)
+    await sendToCustomer();
+  };
 
-  
+  const approveReq = async (props) => {
+    console.log(props)
+    
+    try {
+      setProps(props);
+      sendToCustomerWrite(props);
+    } catch (err) {
+      console.log(err);
+    }
 
-
-const approveReq = async (id) => {
-  await fetch(`http://localhost:8080/api/tokenRequests/${id}`, {
+    await fetch(`http://localhost:8080/api/tokenRequests/${props.id}`, {
       method: 'PUT',
       headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-          "approveStatus": "1"
+        approveStatus: '1',
       }),
-  }).then(res => {
+    }).then((res) => {
       if (res.status === 200) {
-          setSaved(true);
+        setSaved(true);
       } else {
-          setSaved(false);
-      }
-  });
-}
-
-  const declineReq = async (id) => {
-    await fetch(`http://localhost:8080/api/tokenRequests/${id}`, {
-    method: 'PUT',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      "approveStatus":"2"
-    }),
-  }).then(res => {
-      if(res.status === 200){
-          setSaved(true);
-      }else{
         setSaved(false);
       }
-  });
-  }
-
+    });
+  };
 
   
+  const declineReq = async (id) => {
+    await fetch(`http://localhost:8080/api/tokenRequests/${id}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        approveStatus: '2',
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
+        setSaved(true);
+      } else {
+        setSaved(false);
+      }
+    });
+  };
+
   return (
     <Table>
       <TableHead>
@@ -112,25 +114,27 @@ const approveReq = async (id) => {
               <Text>{tokenReq.walletAddress}</Text>
             </TableCell>
             <TableCell>
-            <button
-              className="text-white text-[13px] font-mono bg-green-700 hover:bg-gray-700 transition-all rounded-md w-[220px] h-10 flex items-center justify-center whitespace-nowrap"
-              onClick={() => approveReq(tokenReq.id)}
-            >
-              Approve
-            </button>            
+              <button
+                className="text-white text-[13px] font-mono bg-green-700 hover:bg-gray-700 transition-all rounded-md w-[220px] h-10 flex items-center justify-center whitespace-nowrap"
+                onClick={() => {approveReq(tokenReq)}}
+              >
+                Approve
+              </button>
             </TableCell>
             <TableCell>
-            <button
-              className="text-white text-[13px] font-mono bg-red-700 hover:bg-gray-700 transition-all rounded-md w-[220px] h-10 flex items-center justify-center whitespace-nowrap"
-              onClick={() => declineReq(tokenReq.id)}
-            >
-              Decline
-            </button>
+              <button
+                className="text-white text-[13px] font-mono bg-red-700 hover:bg-gray-700 transition-all rounded-md w-[220px] h-10 flex items-center justify-center whitespace-nowrap"
+                onClick={() => declineReq(tokenReq.id)}
+              >
+                Decline
+              </button>
             </TableCell>
           </TableRow>
-        ))
-        }
+        ))}
       </TableBody>
     </Table>
   );
-}
+};
+
+export default TokenRequestsTable;
+

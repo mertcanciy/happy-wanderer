@@ -7,7 +7,7 @@ import TokenRequestsTable from '../components/admin-panel/table';
 
 export const dynamic = 'force-dynamic';
 
-export default function IndexPage() {  
+const AdminPage: React.FC = () => {  
     const [tokenReqs, setTokenReqs] = useState([]);
 
     useEffect(() => {
@@ -41,3 +41,5 @@ export default function IndexPage() {
       </main>
   );
 }
+
+export default AdminPage;
