@@ -30,7 +30,7 @@ const Debug: NextPage = () => {
                 ))}
               </div>
             )}
-            {contractNames.map(contractName => (
+            {contractNames.map(contractName => (              
               <ContractUI
                 key={contractName}
                 contractName={contractName}

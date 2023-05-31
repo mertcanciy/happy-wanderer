@@ -2,10 +2,12 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, BugAntIcon, SparklesIcon, BriefcaseIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useAccount } from "wagmi";
 
+const adminWalletAddresses = ['0x15694aa9827d960FF97619aEAF8eD7aeD403BA56','0xd42002297eaFB327A04bA4658f340dD91FF8eF01']
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
   const isActive = router.pathname === href;
@@ -29,11 +31,12 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
+  //const session = getServerSession();
   useOutsideClick(
     burgerMenuRef,
     useCallback(() => setIsDrawerOpen(false), []),
   );
-
+  const {address: connectedWalletAddr } = useAccount()
   const navLinks = (
     <>
       <li>
@@ -51,6 +54,18 @@ export const Header = () => {
           Liquidity Pool
         </NavLink>
       </li>
+      {adminWalletAddresses.includes(connectedWalletAddr) 
+      ?
+      <li>
+        <NavLink href="/admin-panel">
+          <BriefcaseIcon className="h-4 w-4" />
+          Admin Panel
+        </NavLink>
+      </li>
+      :
+      <li></li>
+      }
+      
     </>
   );
 
@@ -92,6 +107,7 @@ export const Header = () => {
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
+        {/* <Login user={session?.user} /> */}
       </div>
     </div>
   );
