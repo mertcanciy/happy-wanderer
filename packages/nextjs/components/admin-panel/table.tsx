@@ -52,9 +52,7 @@ const TokenRequestsTable: React.FC = ({ tokenReqs }) => {
   const approveReq = async (props2) => {
     console.log(props)
     try {
-      setProps( props2 );
-      console.log(props)
-      sendToCustomerWrite(props);
+      setProps(props2);
     } catch (err) {
       console.log(err);
     }
@@ -77,6 +75,11 @@ const TokenRequestsTable: React.FC = ({ tokenReqs }) => {
     });
   };
 
+  useEffect(() => {
+    sendToCustomerWrite(props);
+    console.log(props);
+  }, [props])
+  
   
   const declineReq = async (id) => {
     await fetch(`http://ec2-16-170-157-242.eu-north-1.compute.amazonaws.com:8080/api/tokenRequests/${id}`, {

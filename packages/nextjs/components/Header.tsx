@@ -7,7 +7,7 @@ import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaff
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useAccount } from "wagmi";
 
-const adminWalletAddresses = ['0x15694aa9827d960FF97619aEAF8eD7aeD403BA56','0x4aDc44E492aBfAbBcB306575a0edDCE3ca06Cb47']
+const adminWalletAddresses = ['0x15694aa9827d960FF97619aEAF8eD7aeD403BA56','0xd42002297eaFB327A04bA4658f340dD91FF8eF01']
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
   const isActive = router.pathname === href;
