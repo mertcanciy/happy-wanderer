@@ -42,12 +42,7 @@ export const Header = () => {
       <li>
         <NavLink href="/">Home</NavLink>
       </li>
-      <li>
-        <NavLink href="/debug">
-          <BugAntIcon className="h-4 w-4" />
-          Debug Contracts
-        </NavLink>
-      </li>
+
       <li>
         <NavLink href="/liquidity-pool">
           <SparklesIcon className="h-4 w-4" />
@@ -56,12 +51,21 @@ export const Header = () => {
       </li>
       {adminWalletAddresses.includes(connectedWalletAddr) 
       ?
+      <>
+      <li>
+        <NavLink href="/debug">
+          <BugAntIcon className="h-4 w-4" />
+          Debug Contracts
+        </NavLink>
+      </li>
       <li>
         <NavLink href="/admin-panel">
           <BriefcaseIcon className="h-4 w-4" />
           Admin Panel
         </NavLink>
       </li>
+      </>
+
       :
       <li></li>
       }
