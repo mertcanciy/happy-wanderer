@@ -1,6 +1,6 @@
 https://www.loom.com/share/d1239591c4944542a660db787038500d
 # HAPPY WANDERER 
-Happy Wanderer is the Scaffold-Eth 2 implementation of DEX Challenge in SpeedRunEthereum. In addition to swap, add liquidity features, there is an admin panel that users request their HAPPY tokens that they earned from out mobile application. As you can see from the demo video, admins are able to use send HAPPY token from admin panel. 
+Happy Wanderer is the Scaffold-Eth 2 implementation of DEX Challenge in SpeedRunEthereum. In addition to swap, add liquidity features, there is an admin panel that admins see requests that come from our mobile application and send the requested tokens to the requested wallet address. 
 
 # 🏗 Scaffold-ETH 2
 
